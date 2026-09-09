@@ -1,0 +1,1803 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>星星集章本 · 小学生每日积分</title>
+<meta name="description" content="小学生每日积分记录小工具 - 集章、成就、兑换，让孩子在快乐中成长">
+<meta name="theme-color" content="#FFF3D1">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="星星集章本">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23FFB300'/%3E%3Cpath d='M90 30l17 50 52 2-42 30 14 50-41-26-41 26 14-50-42-30 52-2z' fill='%23FFD700' stroke='%231A1228' stroke-width='4' stroke-linejoin='round'/%3E%3Ccircle cx='75' cy='82' r='4' fill='%231A1228'/%3E%3Ccircle cx='105' cy='82' r='4' fill='%231A1228'/%3E%3Cpath d='M72 102c6 6 24 6 30 0' stroke='%231A1228' stroke-width='4' stroke-linecap='round' fill='none'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%23FFB300'/%3E%3Cpath d='M90 30l17 50 52 2-42 30 14 50-41-26-41 26 14-50-42-30 52-2z' fill='%23FFD700' stroke='%231A1228' stroke-width='4' stroke-linejoin='round'/%3E%3C/svg%3E">
+<link rel="manifest" href='data:application/manifest+json,{"name":"星星集章本","short_name":"积分","start_url":".","display":"standalone","background_color":"#FFF3D1","theme_color":"#FFF3D1","icons":[{"src":"data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%27180%27 height=%27180%27 viewBox=%270 0 180 180%27%3E%3Crect width=%27180%27 height=%27180%27 rx=%2740%27 fill=%27%23FFB300%27/%3E%3Cpath d=%27M90 30l17 50 52 2-42 30 14 50-41-26-41 26 14-50-42-30 52-2z%27 fill=%27%23FFD700%27 stroke=%27%231A1228%27 stroke-width=%274%27 stroke-linejoin=%27round%27/%3E%3C/svg%3E","sizes":"180x180","type":"image/svg+xml"}]}'>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --cream:#FFF3D1;
+  --cream-2:#FFE9B8;
+  --ink:#1A1228;
+  --ink-soft:#5A4D6E;
+  --tomato:#FF3B30;
+  --sky:#1A8CFF;
+  --sun:#FFB300;
+  --grass:#2ECC40;
+  --grape:#9B30FF;
+  --peach:#FF6B1A;
+  --pink:#FF2D87;
+  --paper-shadow:4px 4px 0 var(--ink);
+  --shadow-sm:2px 2px 0 var(--ink);
+  --shadow-lg:6px 6px 0 var(--ink);
+  --radius:16px;
+  --radius-sm:10px;
+  --radius-lg:24px;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%;overflow:hidden}
+body{
+  font-family:'Nunito','PingFang SC','Microsoft YaHei','Hiragino Sans GB',sans-serif;
+  background:var(--cream);
+  color:var(--ink);
+  font-weight:700;
+  -webkit-font-smoothing:antialiased;
+  position:fixed;
+  width:100%;
+  display:flex;
+  justify-content:center;
+}
+/* Paper texture overlay */
+body::before{
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image:
+    radial-gradient(circle at 15% 20%,rgba(255,59,48,.12) 0,transparent 45%),
+    radial-gradient(circle at 85% 15%,rgba(26,140,255,.12) 0,transparent 45%),
+    radial-gradient(circle at 50% 80%,rgba(155,48,255,.10) 0,transparent 50%),
+    radial-gradient(circle at 80% 60%,rgba(46,204,64,.08) 0,transparent 45%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='4' height='4'%3E%3Crect width='4' height='4' fill='%23FFF3D1'/%3E%3Cpath d='M0 0h1v1H0zM2 2h1v1H0z' fill='%23000' fill-opacity='.02'/%3E%3C/svg%3E");
+  pointer-events:none;
+  z-index:0;
+}
+.app{
+  width:100%;
+  max-width:440px;
+  height:100vh;
+  height:100dvh;
+  display:flex;
+  flex-direction:column;
+  position:relative;
+  z-index:1;
+  overflow:hidden;
+}
+/* === Top Bar === */
+.topbar{
+  flex-shrink:0;
+  padding:14px 18px 10px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  background:var(--cream);
+  z-index:10;
+}
+.topbar-left{display:flex;align-items:center;gap:10px}
+.mascot-mini{
+  width:42px;height:42px;
+  flex-shrink:0;
+  animation:starBob 3s ease-in-out infinite;
+}
+@keyframes starBob{0%,100%{transform:translateY(0) rotate(-5deg)}50%{transform:translateY(-4px) rotate(5deg)}}
+.topbar h1{
+  font-family:'Baloo 2','PingFang SC',sans-serif;
+  font-size:22px;
+  font-weight:800;
+  letter-spacing:-.5px;
+  line-height:1;
+}
+.topbar .subtitle{
+  font-size:11px;
+  color:var(--ink-soft);
+  font-weight:600;
+  margin-top:2px;
+}
+.streak-badge{
+  background:var(--tomato);
+  color:#fff;
+  border:3px solid var(--ink);
+  border-radius:999px;
+  padding:5px 12px 5px 8px;
+  font-family:'Baloo 2',sans-serif;
+  font-size:14px;
+  font-weight:800;
+  box-shadow:var(--shadow-sm);
+  display:flex;
+  align-items:center;
+  gap:3px;
+}
+.streak-badge svg{width:16px;height:16px}
+/* === Screens === */
+.screens{
+  flex:1;
+  position:relative;
+  overflow:hidden;
+}
+.screen{
+  position:absolute;
+  inset:0;
+  overflow-y:auto;
+  overflow-x:hidden;
+  padding:6px 16px 100px;
+  opacity:0;
+  transform:translateX(20px) scale(.98);
+  pointer-events:none;
+  transition:opacity .35s ease, transform .35s ease;
+  -webkit-overflow-scrolling:touch;
+}
+.screen.active{
+  opacity:1;
+  transform:translateX(0) scale(1);
+  pointer-events:auto;
+}
+.screen::-webkit-scrollbar{width:0}
+
+/* === Card === */
+.card{
+  background:#FFFEF5;
+  border:3px solid var(--ink);
+  border-radius:var(--radius);
+  box-shadow:var(--paper-shadow);
+  padding:16px;
+  margin-bottom:14px;
+}
+.card-title{
+  font-family:'Baloo 2','PingFang SC',sans-serif;
+  font-size:17px;
+  font-weight:800;
+  margin-bottom:12px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.card-title .dot{
+  width:8px;height:24px;
+  border-radius:4px;
+  flex-shrink:0;
+}
+
+/* === Today Screen === */
+.hero-card{
+  background:linear-gradient(135deg,#FFE040 0%,#FFB300 50%,#FF8C1A 100%);
+  border:3px solid var(--ink);
+  border-radius:var(--radius-lg);
+  box-shadow:var(--paper-shadow);
+  padding:20px 18px;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  margin-bottom:14px;
+}
+.hero-card::after{
+  content:'';
+  position:absolute;
+  top:-30px;right:-30px;
+  width:100px;height:100px;
+  background:radial-gradient(circle,rgba(255,255,255,.5),transparent);
+  border-radius:50%;
+}
+.mascot-big{
+  width:80px;height:80px;
+  margin:0 auto 8px;
+  animation:starBob 3s ease-in-out infinite;
+  position:relative;z-index:1;
+}
+.hero-card .date-label{
+  font-size:13px;
+  color:var(--ink);
+  font-weight:800;
+  margin-bottom:4px;
+}
+.hero-card .greeting{
+  font-family:'Baloo 2','PingFang SC',sans-serif;
+  font-size:20px;
+  font-weight:800;
+  margin-bottom:12px;
+  color:var(--ink);
+}
+.points-display{
+  display:flex;
+  align-items:baseline;
+  justify-content:center;
+  gap:4px;
+  margin-bottom:14px;
+  position:relative;z-index:1;
+}
+.points-display .num{
+  font-family:'Baloo 2',sans-serif;
+  font-size:56px;
+  font-weight:800;
+  line-height:1;
+  color:var(--tomato);
+  text-shadow:3px 3px 0 var(--ink);
+}
+.points-display .label{
+  font-size:16px;
+  font-weight:800;
+  color:var(--ink-soft);
+}
+.goal-bar-wrap{
+  background:rgba(255,255,255,.6);
+  border:2.5px solid var(--ink);
+  border-radius:999px;
+  height:14px;
+  overflow:hidden;
+  position:relative;
+  margin-bottom:6px;
+}
+.goal-bar-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--grass),var(--sun));
+  border-radius:999px;
+  width:0;
+  transition:width .6s cubic-bezier(.34,1.56,.64,1);
+}
+.goal-text{
+  font-size:12px;
+  font-weight:700;
+  color:var(--ink-soft);
+}
+.goal-text span{color:var(--ink)}
+
+/* Quick Add */
+.quick-add-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+.quick-item{
+  background:#fff;
+  border:3px solid var(--ink);
+  border-radius:var(--radius-sm);
+  box-shadow:var(--shadow-sm);
+  padding:12px 10px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  cursor:pointer;
+  transition:transform .15s,box-shadow .15s;
+  user-select:none;
+}
+.quick-item:active{
+  transform:translate(2px,2px);
+  box-shadow:0 0 0 var(--ink);
+}
+.quick-item .qi-icon{
+  width:38px;height:38px;
+  border-radius:10px;
+  border:2.5px solid var(--ink);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:20px;
+  flex-shrink:0;
+}
+.quick-item .qi-info{flex:1;min-width:0}
+.quick-item .qi-name{
+  font-size:13px;
+  font-weight:800;
+  line-height:1.2;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.quick-item .qi-pts{
+  font-size:12px;
+  font-weight:800;
+  color:var(--grass);
+}
+.quick-item .qi-pts.minus{color:var(--tomato)}
+
+/* Today Log */
+.today-log{
+  max-height:200px;
+  overflow-y:auto;
+}
+.today-log::-webkit-scrollbar{width:0}
+.log-entry{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:8px 0;
+  border-bottom:2px dashed rgba(42,34,51,.12);
+  animation:slideIn .3s ease;
+}
+.log-entry:last-child{border-bottom:none}
+@keyframes slideIn{from{opacity:0;transform:translateX(-15px)}to{opacity:1;transform:translateX(0)}}
+.log-entry .le-icon{
+  width:32px;height:32px;
+  border-radius:8px;
+  border:2px solid var(--ink);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+  flex-shrink:0;
+}
+.log-entry .le-name{flex:1;font-size:13px;font-weight:700}
+.log-entry .le-time{font-size:11px;color:var(--ink-soft);font-weight:600}
+.log-entry .le-pts{
+  font-family:'Baloo 2',sans-serif;
+  font-size:16px;
+  font-weight:800;
+}
+.log-entry .le-pts.plus{color:var(--grass)}
+.log-entry .le-pts.minus{color:var(--tomato)}
+.log-entry .le-del{
+  width:24px;height:24px;
+  border:none;
+  background:rgba(232,85,75,.15);
+  color:var(--tomato);
+  border-radius:6px;
+  font-size:14px;
+  font-weight:800;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.empty-log{
+  text-align:center;
+  padding:20px 0;
+  color:var(--ink-soft);
+  font-size:13px;
+}
+
+/* === Records / Calendar === */
+.week-nav{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:12px;
+}
+.week-nav button{
+  border:3px solid var(--ink);
+  background:#fff;
+  border-radius:var(--radius-sm);
+  box-shadow:var(--shadow-sm);
+  width:36px;height:36px;
+  font-size:18px;
+  font-weight:800;
+  cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  transition:transform .15s,box-shadow .15s;
+}
+.week-nav button:active{transform:translate(2px,2px);box-shadow:none}
+.week-nav .week-label{
+  font-family:'Baloo 2','PingFang SC',sans-serif;
+  font-size:16px;
+  font-weight:800;
+}
+.calendar-grid{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:4px;
+}
+.cal-head{
+  text-align:center;
+  font-size:11px;
+  font-weight:800;
+  color:var(--ink-soft);
+  padding:4px 0;
+}
+.cal-cell{
+  aspect-ratio:1;
+  border:2.5px solid var(--ink);
+  border-radius:8px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:1px;
+  font-size:13px;
+  font-weight:800;
+  cursor:pointer;
+  transition:transform .15s;
+  position:relative;
+}
+.cal-cell:active{transform:scale(.92)}
+.cal-cell.today{
+  background:linear-gradient(135deg,var(--sun),var(--peach));
+}
+.cal-cell.selected{
+  background:var(--sky);
+  color:#fff;
+}
+.cal-cell.empty{
+  border-color:transparent;
+  background:transparent;
+  cursor:default;
+}
+.cal-cell .cal-pts{
+  font-family:'Baloo 2',sans-serif;
+  font-size:10px;
+  color:var(--grass);
+}
+.cal-cell.selected .cal-pts{color:#fff}
+.cal-cell.negative .cal-pts{color:var(--tomato)}
+.day-detail{
+  margin-top:14px;
+}
+.day-detail-header{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+}
+.day-detail-header .day-num{
+  font-family:'Baloo 2',sans-serif;
+  font-size:28px;
+  font-weight:800;
+  line-height:1;
+}
+.day-detail-header .day-info{font-size:12px;color:var(--ink-soft);font-weight:700}
+.day-detail-header .day-total{
+  margin-left:auto;
+  font-family:'Baloo 2',sans-serif;
+  font-size:24px;
+  font-weight:800;
+  color:var(--grass);
+}
+.day-detail-header .day-total.negative{color:var(--tomato)}
+
+/* === Achievements === */
+.ach-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+}
+.ach-badge{
+  border:3px solid var(--ink);
+  border-radius:var(--radius-sm);
+  box-shadow:var(--shadow-sm);
+  padding:12px 8px;
+  text-align:center;
+  position:relative;
+  background:#fff;
+  transition:transform .2s;
+}
+.ach-badge:active{transform:translate(1px,1px)}
+.ach-badge.locked{
+  opacity:.45;
+  filter:saturate(.3);
+  background:var(--cream-2);
+}
+.ach-badge .ach-icon{
+  width:48px;height:48px;
+  margin:0 auto 6px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+}
+.ach-badge .ach-name{
+  font-size:11px;
+  font-weight:800;
+  line-height:1.2;
+  margin-bottom:2px;
+}
+.ach-badge .ach-desc{
+  font-size:9px;
+  font-weight:600;
+  color:var(--ink-soft);
+  line-height:1.2;
+}
+.ach-badge .ach-star{
+  position:absolute;
+  top:-6px;right:-6px;
+  width:24px;height:24px;
+  background:linear-gradient(135deg,var(--sun),var(--pink));
+  border:2.5px solid var(--ink);
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:12px;
+  font-weight:800;
+}
+.ach-progress{
+  margin-bottom:14px;
+}
+.ach-progress-bar{
+  background:var(--cream-2);
+  border:2.5px solid var(--ink);
+  border-radius:999px;
+  height:12px;
+  overflow:hidden;
+}
+.ach-progress-fill{
+  height:100%;
+  background:linear-gradient(90deg,var(--grape),var(--pink));
+  border-radius:999px;
+  transition:width .6s cubic-bezier(.34,1.56,.64,1);
+}
+
+/* === Rewards Shop === */
+.reward-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  border:3px solid var(--ink);
+  border-radius:var(--radius-sm);
+  box-shadow:var(--shadow-sm);
+  padding:12px;
+  margin-bottom:10px;
+  background:#fff;
+  transition:transform .15s,box-shadow .15s;
+}
+.reward-item:active{transform:translate(1px,1px)}
+.reward-item .rw-icon{
+  width:48px;height:48px;
+  border:2.5px solid var(--ink);
+  border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;
+  flex-shrink:0;
+}
+.reward-item .rw-info{flex:1;min-width:0}
+.reward-item .rw-name{font-size:14px;font-weight:800;line-height:1.2}
+.reward-item .rw-cost{
+  font-family:'Baloo 2',sans-serif;
+  font-size:15px;
+  font-weight:800;
+  color:var(--peach);
+}
+.reward-item .rw-btn{
+  border:3px solid var(--ink);
+  border-radius:10px;
+  box-shadow:var(--shadow-sm);
+  padding:8px 14px;
+  font-family:'Baloo 2',sans-serif;
+  font-size:13px;
+  font-weight:800;
+  cursor:pointer;
+  background:linear-gradient(135deg,var(--grass),var(--sky));
+  color:#fff;
+  flex-shrink:0;
+  transition:transform .15s,box-shadow .15s;
+}
+.reward-item .rw-btn:active{transform:translate(2px,2px);box-shadow:none}
+.reward-item .rw-btn.disabled{
+  background:var(--cream-2);
+  color:var(--ink-soft);
+  cursor:not-allowed;
+}
+
+/* === Profile === */
+.profile-card{
+  text-align:center;
+  padding:24px 16px;
+}
+.profile-avatar{
+  width:80px;height:80px;
+  border:3px solid var(--ink);
+  border-radius:50%;
+  box-shadow:var(--paper-shadow);
+  margin:0 auto 12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:40px;
+  background:linear-gradient(135deg,var(--sun),var(--peach));
+}
+.profile-name{
+  font-family:'Baloo 2','PingFang SC',sans-serif;
+  font-size:22px;
+  font-weight:800;
+  margin-bottom:4px;
+}
+.profile-grade{
+  font-size:13px;
+  color:var(--ink-soft);
+  font-weight:700;
+  margin-bottom:16px;
+}
+.profile-stats{
+  display:flex;
+  justify-content:space-around;
+  padding:12px 0;
+  border-top:2.5px dashed var(--ink);
+}
+.profile-stat .ps-num{
+  font-family:'Baloo 2',sans-serif;
+  font-size:24px;
+  font-weight:800;
+  line-height:1;
+}
+.profile-stat .ps-label{
+  font-size:11px;
+  font-weight:700;
+  color:var(--ink-soft);
+  margin-top:2px;
+}
+.menu-item{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px 12px;
+  border-bottom:2px dashed rgba(42,34,51,.12);
+  cursor:pointer;
+  transition:background .15s;
+}
+.menu-item:last-child{border-bottom:none}
+.menu-item:active{background:var(--cream-2)}
+.menu-item .mi-icon{
+  width:36px;height:36px;
+  border:2.5px solid var(--ink);
+  border-radius:10px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+  flex-shrink:0;
+}
+.menu-item .mi-label{flex:1;font-size:14px;font-weight:700}
+.menu-item .mi-arrow{font-size:16px;color:var(--ink-soft)}
+
+/* === Bottom Nav === */
+.bottom-nav{
+  flex-shrink:0;
+  display:flex;
+  background:var(--cream);
+  border-top:3px solid var(--ink);
+  padding:6px 8px;
+  padding-bottom:calc(6px + env(safe-area-inset-bottom,0px));
+  z-index:20;
+}
+.nav-btn{
+  flex:1;
+  background:none;
+  border:none;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:3px;
+  padding:6px 2px;
+  cursor:pointer;
+  color:var(--ink-soft);
+  font-size:10px;
+  font-weight:800;
+  transition:color .2s,transform .2s;
+  position:relative;
+}
+.nav-btn svg{width:24px;height:24px}
+.nav-btn.active{color:var(--tomato)}
+.nav-btn.active::after{
+  content:'';
+  position:absolute;
+  bottom:0;
+  width:24px;height:3px;
+  background:var(--tomato);
+  border-radius:3px;
+}
+.nav-btn:active{transform:scale(.88)}
+
+/* === Floating Action Button === */
+.fab{
+  position:absolute;
+  bottom:76px;
+  right:16px;
+  width:56px;height:56px;
+  border:3px solid var(--ink);
+  border-radius:50%;
+  box-shadow:var(--paper-shadow);
+  background:linear-gradient(135deg,var(--tomato),var(--pink));
+  color:#fff;
+  font-size:28px;
+  font-weight:800;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  z-index:15;
+  transition:transform .2s;
+  animation:fabPulse 2.5s ease-in-out infinite;
+}
+@keyframes fabPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.fab:active{transform:scale(.9)}
+
+/* === Modal === */
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(42,34,51,.4);
+  z-index:100;
+  display:none;
+  align-items:flex-end;
+  justify-content:center;
+  padding:0;
+}
+.modal-overlay.show{display:flex;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{
+  background:var(--cream);
+  border:3px solid var(--ink);
+  border-bottom:none;
+  border-radius:var(--radius-lg) var(--radius-lg) 0 0;
+  box-shadow:0 -4px 0 var(--ink);
+  width:100%;
+  max-width:440px;
+  padding:20px 18px;
+  padding-bottom:calc(20px + env(safe-area-inset-bottom,0px));
+  max-height:85vh;
+  overflow-y:auto;
+  animation:slideUp .3s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-handle{
+  width:40px;height:5px;
+  background:var(--ink);
+  border-radius:3px;
+  margin:0 auto 16px;
+  opacity:.3;
+}
+.modal h2{
+  font-family:'Baloo 2','PingFang SC',sans-serif;
+  font-size:22px;
+  font-weight:800;
+  margin-bottom:16px;
+  text-align:center;
+}
+.input-row{
+  display:flex;
+  gap:8px;
+  margin-bottom:14px;
+}
+.input-row input{
+  flex:1;
+  border:3px solid var(--ink);
+  border-radius:var(--radius-sm);
+  padding:12px 14px;
+  font-family:'Nunito','PingFang SC',sans-serif;
+  font-size:15px;
+  font-weight:700;
+  background:#fff;
+  outline:none;
+}
+.input-row select{
+  border:3px solid var(--ink);
+  border-radius:var(--radius-sm);
+  padding:12px 14px;
+  font-family:'Nunito','PingFang SC',sans-serif;
+  font-size:15px;
+  font-weight:700;
+  background:#fff;
+  outline:none;
+  cursor:pointer;
+}
+.cat-picker{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+  margin-bottom:14px;
+}
+.cat-chip{
+  border:2.5px solid var(--ink);
+  border-radius:999px;
+  padding:6px 12px;
+  font-size:13px;
+  font-weight:800;
+  cursor:pointer;
+  background:#fff;
+  transition:transform .15s;
+}
+.cat-chip:active{transform:scale(.92)}
+.cat-chip.active{color:#fff}
+.btn-row{display:flex;gap:10px}
+.btn{
+  flex:1;
+  border:3px solid var(--ink);
+  border-radius:var(--radius-sm);
+  box-shadow:var(--shadow-sm);
+  padding:14px;
+  font-family:'Baloo 2','PingFang SC',sans-serif;
+  font-size:16px;
+  font-weight:800;
+  cursor:pointer;
+  transition:transform .15s,box-shadow .15s;
+}
+.btn:active{transform:translate(2px,2px);box-shadow:none}
+.btn-primary{background:linear-gradient(135deg,var(--grass),var(--sky));color:#fff}
+.btn-secondary{background:var(--cream-2);color:var(--ink)}
+.btn-danger{background:linear-gradient(135deg,var(--tomato),var(--pink));color:#fff}
+
+.item-manage-list{
+  margin-bottom:14px;
+}
+.item-manage-row{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 8px;
+  border-bottom:2px dashed rgba(42,34,51,.1);
+}
+.item-manage-row .imr-icon{
+  width:32px;height:32px;
+  border:2px solid var(--ink);
+  border-radius:8px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+  flex-shrink:0;
+}
+.item-manage-row .imr-name{flex:1;font-size:13px;font-weight:700}
+.item-manage-row .imr-pts{
+  font-family:'Baloo 2',sans-serif;
+  font-size:14px;
+  font-weight:800;
+}
+.item-manage-row .imr-pts.plus{color:var(--grass)}
+.item-manage-row .imr-pts.minus{color:var(--tomato)}
+.item-manage-row .imr-del{
+  border:2px solid var(--ink);
+  background:#fff;
+  border-radius:6px;
+  width:28px;height:28px;
+  font-size:14px;
+  cursor:pointer;
+  color:var(--tomato);
+}
+
+/* Toast */
+.toast{
+  position:fixed;
+  top:60%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(.8);
+  background:var(--ink);
+  color:#fff;
+  border:3px solid var(--ink);
+  border-radius:var(--radius-sm);
+  box-shadow:var(--paper-shadow);
+  padding:14px 24px;
+  font-family:'Baloo 2','PingFang SC',sans-serif;
+  font-size:16px;
+  font-weight:800;
+  z-index:200;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .25s,transform .25s cubic-bezier(.34,1.56,.64,1);
+  white-space:nowrap;
+}
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,-50%) scale(1);
+}
+
+/* Floating points animation */
+.float-pts{
+  position:fixed;
+  font-family:'Baloo 2',sans-serif;
+  font-size:32px;
+  font-weight:800;
+  pointer-events:none;
+  z-index:150;
+  animation:floatPts 1s ease-out forwards;
+}
+@keyframes floatPts{
+  0%{opacity:0;transform:translateY(0) scale(.5)}
+  20%{opacity:1;transform:translateY(-10px) scale(1.2)}
+  100%{opacity:0;transform:translateY(-80px) scale(1)}
+}
+
+/* Confetti */
+.confetti{
+  position:fixed;
+  width:8px;height:8px;
+  pointer-events:none;
+  z-index:150;
+  animation:confettiFall 1.5s ease-out forwards;
+}
+@keyframes confettiFall{
+  0%{opacity:1;transform:translateY(0) rotate(0)}
+  100%{opacity:0;transform:translateY(300px) rotate(720deg)}
+}
+
+@media(max-width:380px){
+  .quick-add-grid{grid-template-columns:1fr}
+  .ach-grid{grid-template-columns:repeat(3,1fr)}
+  .points-display .num{font-size:48px}
+}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+
+  <!-- Top Bar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <svg class="mascot-mini" viewBox="0 0 48 48" fill="none">
+        <path d="M24 4l4.5 13.5L42 18l-10.5 8L35 40l-11-7-11 7 3.5-14L6 18l13.5-.5L24 4z" fill="#FFD700" stroke="#1A1228" stroke-width="2.5" stroke-linejoin="round"/>
+        <circle cx="20" cy="22" r="2" fill="#1A1228"/>
+        <circle cx="28" cy="22" r="2" fill="#1A1228"/>
+        <path d="M19 28c2 2 7 2 9 0" stroke="#1A1228" stroke-width="2" stroke-linecap="round" fill="none"/>
+      </svg>
+      <div>
+        <h1>星星集章本</h1>
+        <div class="subtitle" id="todayDate">加载中...</div>
+      </div>
+    </div>
+    <div class="streak-badge" id="streakBadge">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M13 2L4 14h6l-2 8 9-12h-6l2-8z" fill="#fff" stroke="#2A2233" stroke-width="2" stroke-linejoin="round"/></svg>
+      <span id="streakNum">0</span>
+    </div>
+  </div>
+
+  <!-- Screens -->
+  <div class="screens" id="screens">
+
+    <!-- === TODAY === -->
+    <div class="screen active" id="screen-today">
+      <div class="hero-card">
+        <svg class="mascot-big" viewBox="0 0 48 48" fill="none">
+          <path d="M24 4l4.5 13.5L42 18l-10.5 8L35 40l-11-7-11 7 3.5-14L6 18l13.5-.5L24 4z" fill="#FFD700" stroke="#1A1228" stroke-width="2.5" stroke-linejoin="round"/>
+          <circle cx="20" cy="22" r="2" fill="#1A1228"/>
+          <circle cx="28" cy="22" r="2" fill="#1A1228"/>
+          <path d="M19 28c2 2 7 2 9 0" stroke="#1A1228" stroke-width="2" stroke-linecap="round" fill="none"/>
+        </svg>
+        <div class="date-label" id="heroDate"></div>
+        <div class="greeting" id="heroGreeting">加油吧，小星星！</div>
+        <div class="points-display">
+          <span class="num" id="todayPoints">0</span>
+          <span class="label">分</span>
+        </div>
+        <div class="goal-bar-wrap">
+          <div class="goal-bar-fill" id="goalBar"></div>
+        </div>
+        <div class="goal-text" id="goalText">今日目标 0 分</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--sky)"></span>快速加分</div>
+        <div class="quick-add-grid" id="quickAddGrid"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--grass)"></span>今日记录</div>
+        <div class="today-log" id="todayLog">
+          <div class="empty-log">还没有记录哦，点击下方"+"添加</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- === RECORDS === -->
+    <div class="screen" id="screen-records">
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--grape)"></span>积分日历</div>
+        <div class="week-nav">
+          <button id="prevWeek">‹</button>
+          <span class="week-label" id="weekLabel"></span>
+          <button id="nextWeek">›</button>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+      </div>
+      <div class="card day-detail" id="dayDetailCard" style="display:none">
+        <div class="day-detail-header">
+          <div>
+            <div class="day-num" id="ddNum"></div>
+            <div class="day-info" id="ddInfo"></div>
+          </div>
+          <div class="day-total" id="ddTotal"></div>
+        </div>
+        <div id="ddLog"></div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--peach)"></span>本周概览</div>
+        <div id="weekSummary"></div>
+      </div>
+    </div>
+
+    <!-- === ACHIEVEMENTS === -->
+    <div class="screen" id="screen-achievements">
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--sun)"></span>成就进度</div>
+        <div class="ach-progress">
+          <div class="ach-progress-bar"><div class="ach-progress-fill" id="achProgressFill"></div></div>
+        </div>
+        <div style="text-align:center;font-size:12px;color:var(--ink-soft);font-weight:700" id="achProgressText">已获得 0 / 0 枚徽章</div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--pink)"></span>徽章墙</div>
+        <div class="ach-grid" id="achGrid"></div>
+      </div>
+    </div>
+
+    <!-- === REWARDS === -->
+    <div class="screen" id="screen-rewards">
+      <div class="hero-card" style="background:linear-gradient(135deg,#FF6B1A 0%,#FF2D87 50%,#9B30FF 100%)">
+        <div class="greeting" style="color:#fff">积分商店</div>
+        <div class="points-display">
+          <span class="num" id="totalPoints" style="color:#fff;text-shadow:3px 3px 0 var(--ink)">0</span>
+          <span class="label" style="color:#fff">可用积分</span>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title"><span class="dot" style="background:var(--peach)"></span>兑换奖励</div>
+        <div id="rewardList"></div>
+      </div>
+    </div>
+
+    <!-- === PROFILE === -->
+    <div class="screen" id="screen-profile">
+      <div class="card profile-card">
+        <div class="profile-avatar" id="profileAvatar">🦊</div>
+        <div class="profile-name" id="profileName">小朋友</div>
+        <div class="profile-grade" id="profileGrade">一年级</div>
+        <div class="profile-stats">
+          <div class="profile-stat">
+            <div class="ps-num" id="psTotal">0</div>
+            <div class="ps-label">总积分</div>
+          </div>
+          <div class="profile-stat">
+            <div class="ps-num" id="psDays">0</div>
+            <div class="ps-label">坚持天数</div>
+          </div>
+          <div class="profile-stat">
+            <div class="ps-num" id="psBadges">0</div>
+            <div class="ps-label">徽章数</div>
+          </div>
+        </div>
+      </div>
+      <div class="card" style="padding:0">
+        <div class="menu-item" id="menuEditProfile">
+          <div class="mi-icon" style="background:var(--sky)">👤</div>
+          <div class="mi-label">编辑资料</div>
+          <div class="mi-arrow">›</div>
+        </div>
+        <div class="menu-item" id="menuManageItems">
+          <div class="mi-icon" style="background:var(--grass)">⚙</div>
+          <div class="mi-label">管理积分项目</div>
+          <div class="mi-arrow">›</div>
+        </div>
+        <div class="menu-item" id="menuSetGoal">
+          <div class="mi-icon" style="background:var(--sun)">🎯</div>
+          <div class="mi-label">设置每日目标</div>
+          <div class="mi-arrow">›</div>
+        </div>
+        <div class="menu-item" id="menuReset">
+          <div class="mi-icon" style="background:var(--tomato)">🗑</div>
+          <div class="mi-label">清空所有数据</div>
+          <div class="mi-arrow">›</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- FAB -->
+  <button class="fab" id="fab">+</button>
+
+  <!-- Bottom Nav -->
+  <div class="bottom-nav">
+    <button class="nav-btn active" data-screen="today">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M3 12l9-8 9 8M5 10v10h5v-6h4v6h5V10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      今日
+    </button>
+    <button class="nav-btn" data-screen="records">
+      <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="5" width="18" height="16" rx="2" stroke="currentColor" stroke-width="2"/><path d="M3 9h18M8 3v4M16 3v4M8 14h2M12 14h2M8 18h2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      记录
+    </button>
+    <button class="nav-btn" data-screen="achievements">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M12 2l3 6 7 1-5 5 1 7-6-3-6 3 1-7-5-5 7-1 3-6z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
+      成就
+    </button>
+    <button class="nav-btn" data-screen="rewards">
+      <svg viewBox="0 0 24 24" fill="none"><path d="M4 7h16l-2 12H6L4 7zM4 7l1-3h14l1 3M9 11v3M15 11v3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      兑换
+    </button>
+    <button class="nav-btn" data-screen="profile">
+      <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      我的
+    </button>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal" id="modalContent"></div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ===== DATA LAYER =====
+const STORAGE_KEY = 'starPointBook_v1';
+let state = {
+  profile: { name:'小朋友', grade:'一年级', avatar:'🦊', dailyGoal:15 },
+  items: [
+    { id:'i1', name:'按时完成作业', pts:5, cat:'学习', icon:'📝', color:'sky' },
+    { id:'i2', name:'主动阅读', pts:3, cat:'学习', icon:'📖', color:'sky' },
+    { id:'i3', name:'上课认真听讲', pts:4, cat:'学习', icon:'✏', color:'sky' },
+    { id:'i4', name:'考试满分', pts:10, cat:'学习', icon:'🏆', color:'sun' },
+    { id:'i5', name:'帮助同学', pts:3, cat:'品德', icon:'🤝', color:'grass' },
+    { id:'i6', name:'主动问好', pts:2, cat:'品德', icon:'👋', color:'grass' },
+    { id:'i7', name:'不撒谎', pts:2, cat:'品德', icon:'✓', color:'grass' },
+    { id:'i8', name:'帮做家务', pts:4, cat:'劳动', icon:'🧹', color:'peach' },
+    { id:'i9', name:'整理房间', pts:3, cat:'劳动', icon:'🧺', color:'peach' },
+    { id:'i10', name:'坚持运动', pts:4, cat:'运动', icon:'⚽', color:'tomato' },
+    { id:'i11', name:'按时起床', pts:2, cat:'生活', icon:'⏰', color:'grape' },
+    { id:'i12', name:'少吃零食', pts:3, cat:'生活', icon:'🥗', color:'grape' },
+    { id:'i13', name:'浪费粮食', pts:-3, cat:'扣分', icon:'⚠', color:'tomato' },
+    { id:'i14', name:'迟到', pts:-2, cat:'扣分', icon:'⏱', color:'tomato' },
+    { id:'i15', name:'吵架打闹', pts:-4, cat:'扣分', icon:'💢', color:'tomato' },
+  ],
+  logs: {}, // { 'YYYY-MM-DD': [{ id, name, pts, icon, color, time, logId }] }
+  redeemed: [], // [{ rewardId, name, cost, date }]
+  rewards: [
+    { id:'r1', name:'看动画片30分钟', cost:20, icon:'📺' },
+    { id:'r2', name:'吃一次零食', cost:15, icon:'🍬' },
+    { id:'r3', name:'去公园玩', cost:30, icon:'🎡' },
+    { id:'r4', name:'买一本新书', cost:50, icon:'📚' },
+    { id:'r5', name:'周末晚睡1小时', cost:25, icon:'🌙' },
+    { id:'r6', name:'选一份小礼物', cost:80, icon:'🎁' },
+    { id:'r7', name:'去游乐园', cost:150, icon:'🎢' },
+  ],
+  achievements: [
+    { id:'a1', name:'初出茅庐', desc:'获得第一分', icon:'🌱', check:s=>totalAll(s)>=1 },
+    { id:'a2', name:'小试身手', desc:'单日得10分', icon:'⭐', check:s=>Math.max(...Object.values(s.logs).flatMap(d=>d.map(e=>e.pts)).concat([0]))>=10, alt:s=>maxDayPoints(s)>=10 },
+    { id:'a3', name:'积少成多', desc:'累计100分', icon:'💯', check:s=>totalAll(s)>=100 },
+    { id:'a4', name:'坚持一周', desc:'连续7天记录', icon:'🔥', check:s=>calcStreak(s)>=7 },
+    { id:'a5', name:'满勤之星', desc:'单日目标达标', icon:'🎯', check:s=>Object.keys(s.logs).some(d=>dayTotal(s,d)>=s.profile.dailyGoal) },
+    { id:'a6', name:'劳动能手', desc:'劳动类累计20分', icon:'🧹', check:s=>catTotal(s,'劳动')>=20 },
+    { id:'a7', name:'学习达人', desc:'学习类累计50分', icon:'📚', check:s=>catTotal(s,'学习')>=50 },
+    { id:'a8', name:'运动健将', desc:'运动类累计30分', icon:'⚽', check:s=>catTotal(s,'运动')>=30 },
+    { id:'a9', name:'百星闪耀', desc:'累计200分', icon:'🌟', check:s=>totalAll(s)>=200 },
+    { id:'a10', name:'坚持不懈', desc:'连续30天记录', icon:'👑', check:s=>calcStreak(s)>=30 },
+    { id:'a11', name:'兑换新手', desc:'第一次兑换奖励', icon:'🛍', check:s=>s.redeemed.length>=1 },
+    { id:'a12', name:'满分日', desc:'单日得20分', icon:'💎', check:s=>maxDayPoints(s)>=20 },
+  ]
+};
+
+function load(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw){
+      const data = JSON.parse(raw);
+      state = { ...state, ...data, profile:{...state.profile, ...data.profile}, achievements: state.achievements };
+    }
+  }catch(e){ console.warn('load error', e); }
+}
+function save(){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+// ===== HELPERS =====
+const DAYS = ['日','一','二','三','四','五','六'];
+function todayStr(){ return fmtDate(new Date()); }
+function fmtDate(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
+function parseDate(s){ const [y,m,d] = s.split('-').map(Number); return new Date(y,m-1,d); }
+function isSameDay(a,b){ return fmtDate(a)===fmtDate(b); }
+
+function dayTotal(s, dateStr){
+  const logs = s.logs[dateStr] || [];
+  return logs.reduce((sum,e)=>sum+e.pts, 0);
+}
+function totalAll(s){
+  return Object.values(s.logs).flat().reduce((sum,e)=>sum+e.pts, 0);
+}
+function maxDayPoints(s){
+  return Math.max(0, ...Object.values(s.logs).map(d=>d.reduce((sum,e)=>sum+e.pts,0)));
+}
+function catTotal(s, cat){
+  return Object.values(s.logs).flat().filter(e=>{
+    const item = s.items.find(i=>i.id===e.id);
+    return item && item.cat===cat;
+  }).reduce((sum,e)=>sum+e.pts, 0);
+}
+function availablePoints(s){
+  const total = totalAll(s);
+  const spent = s.redeemed.reduce((sum,r)=>sum+r.cost, 0);
+  return total - spent;
+}
+function calcStreak(s){
+  const dates = Object.keys(s.logs).filter(d=>dayTotal(s,d)>0).sort();
+  if(dates.length===0) return 0;
+  let streak = 0;
+  let cur = new Date();
+  // if today has no points yet, start from yesterday
+  if(!s.logs[todayStr()] || dayTotal(s, todayStr())===0){
+    cur.setDate(cur.getDate()-1);
+  }
+  while(true){
+    const ds = fmtDate(cur);
+    if(dayTotal(s,ds)>0){
+      streak++;
+      cur.setDate(cur.getDate()-1);
+    } else {
+      break;
+    }
+  }
+  return streak;
+}
+
+// color map
+const COLORS = {
+  tomato:'#FF3B30', sky:'#1A8CFF', sun:'#FFB300', grass:'#2ECC40',
+  grape:'#9B30FF', peach:'#FF6B1A', pink:'#FF2D87'
+};
+
+// ===== RENDER =====
+function render(){
+  renderTopBar();
+  renderToday();
+  renderRecords();
+  renderAchievements();
+  renderRewards();
+  renderProfile();
+}
+
+function renderTopBar(){
+  const now = new Date();
+  document.getElementById('todayDate').textContent = `${now.getMonth()+1}月${now.getDate()}日 星期${DAYS[now.getDay()]}`;
+  document.getElementById('streakNum').textContent = calcStreak(state);
+}
+
+function renderToday(){
+  const today = todayStr();
+  const pts = dayTotal(state, today);
+  document.getElementById('heroDate').textContent = `${new Date().getMonth()+1}月${new Date().getDate()}日 · 星期${DAYS[new Date().getDay()]}`;
+  document.getElementById('todayPoints').textContent = pts;
+  const goal = state.profile.dailyGoal || 15;
+  const pct = Math.min(100, goal>0 ? (pts/goal)*100 : 0);
+  document.getElementById('goalBar').style.width = pct + '%';
+  document.getElementById('goalText').innerHTML = `今日目标 <span>${goal}</span> 分 · 还差 <span>${Math.max(0,goal-pts)}</span> 分`;
+
+  // quick add - show all items
+  const grid = document.getElementById('quickAddGrid');
+  grid.innerHTML = '';
+  state.items.forEach(item=>{
+    const el = document.createElement('div');
+    el.className = 'quick-item';
+    el.innerHTML = `
+      <div class="qi-icon" style="background:${COLORS[item.color]||'#ccc'};color:#fff">${item.icon}</div>
+      <div class="qi-info">
+        <div class="qi-name">${item.name}</div>
+        <div class="qi-pts ${item.pts<0?'minus':''}">${item.pts>0?'+':''}${item.pts}分</div>
+      </div>
+    `;
+    el.addEventListener('click', ()=>addPoint(item, el));
+    grid.appendChild(el);
+  });
+
+  // today log
+  const logEl = document.getElementById('todayLog');
+  const logs = state.logs[today] || [];
+  if(logs.length===0){
+    logEl.innerHTML = '<div class="empty-log">还没有记录哦，点击下方"+"添加</div>';
+  } else {
+    logEl.innerHTML = '';
+    logs.slice().reverse().forEach(entry=>{
+      const row = document.createElement('div');
+      row.className = 'log-entry';
+      row.innerHTML = `
+        <div class="le-icon" style="background:${COLORS[entry.color]||'#ccc'};color:#fff">${entry.icon}</div>
+        <div class="le-name">${entry.name}</div>
+        <div class="le-time">${entry.time}</div>
+        <div class="le-pts ${entry.pts>=0?'plus':'minus'}">${entry.pts>0?'+':''}${entry.pts}</div>
+        <button class="le-del" data-lid="${entry.logId}">✕</button>
+      `;
+      row.querySelector('.le-del').addEventListener('click', ()=>delLog(entry.logId));
+      logEl.appendChild(row);
+    });
+  }
+}
+
+let calOffset = 0;
+let calSelected = todayStr();
+
+function renderRecords(){
+  const base = new Date();
+  base.setDate(base.getDate() + calOffset * 7);
+  // start of week (Sunday)
+  const day = base.getDay();
+  const weekStart = new Date(base);
+  weekStart.setDate(base.getDate() - day);
+  const weekEnd = new Date(weekStart);
+  weekEnd.setDate(weekStart.getDate() + 6);
+
+  document.getElementById('weekLabel').textContent =
+    `${weekStart.getMonth()+1}/${weekStart.getDate()} - ${weekEnd.getMonth()+1}/${weekEnd.getDate()}`;
+
+  const grid = document.getElementById('calendarGrid');
+  grid.innerHTML = '';
+  ['日','一','二','三','四','五','六'].forEach(h=>{
+    const el = document.createElement('div');
+    el.className = 'cal-head';
+    el.textContent = h;
+    grid.appendChild(el);
+  });
+
+  const today = todayStr();
+  for(let i=0; i<7; i++){
+    const d = new Date(weekStart);
+    d.setDate(weekStart.getDate()+i);
+    const ds = fmtDate(d);
+    const el = document.createElement('div');
+    el.className = 'cal-cell';
+    if(ds===today) el.classList.add('today');
+    if(ds===calSelected) el.classList.add('selected');
+    const pts = dayTotal(state, ds);
+    el.innerHTML = `<span>${d.getDate()}</span>${pts!==0?`<span class="cal-pts">${pts>0?'+':''}${pts}</span>`:''}`;
+    if(pts<0) el.classList.add('negative');
+    el.addEventListener('click', ()=>{ calSelected = ds; renderRecords(); });
+    grid.appendChild(el);
+  }
+
+  // day detail
+  const ddCard = document.getElementById('dayDetailCard');
+  if(calSelected){
+    ddCard.style.display = '';
+    const d = parseDate(calSelected);
+    document.getElementById('ddNum').textContent = d.getDate();
+    document.getElementById('ddInfo').textContent = `${d.getMonth()+1}月 · 星期${DAYS[d.getDay()]}`;
+    const pts = dayTotal(state, calSelected);
+    const totalEl = document.getElementById('ddTotal');
+    totalEl.textContent = `${pts>0?'+':''}${pts}分`;
+    totalEl.className = 'day-total' + (pts<0?' negative':'');
+
+    const logs = state.logs[calSelected] || [];
+    const ddLog = document.getElementById('ddLog');
+    if(logs.length===0){
+      ddLog.innerHTML = '<div class="empty-log">这一天没有记录</div>';
+    } else {
+      ddLog.innerHTML = '';
+      logs.slice().reverse().forEach(entry=>{
+        const row = document.createElement('div');
+        row.className = 'log-entry';
+        row.innerHTML = `
+          <div class="le-icon" style="background:${COLORS[entry.color]||'#ccc'};color:#fff">${entry.icon}</div>
+          <div class="le-name">${entry.name}</div>
+          <div class="le-time">${entry.time}</div>
+          <div class="le-pts ${entry.pts>=0?'plus':'minus'}">${entry.pts>0?'+':''}${entry.pts}</div>
+        `;
+        ddLog.appendChild(row);
+      });
+    }
+  }
+
+  // week summary
+  const wsEl = document.getElementById('weekSummary');
+  let weekTotal = 0;
+  let activeDays = 0;
+  let bestDay = { date:'', pts:0 };
+  for(let i=0;i<7;i++){
+    const d = new Date(weekStart);
+    d.setDate(weekStart.getDate()+i);
+    const ds = fmtDate(d);
+    const pts = dayTotal(state, ds);
+    weekTotal += pts;
+    if(pts!==0) activeDays++;
+    if(pts>bestDay.pts) bestDay = { date:`${d.getMonth()+1}/${d.getDate()}`, pts };
+  }
+  const catTotals = {};
+  for(let i=0;i<7;i++){
+    const d = new Date(weekStart);
+    d.setDate(weekStart.getDate()+i);
+    const ds = fmtDate(d);
+    (state.logs[ds]||[]).forEach(e=>{
+      const item = state.items.find(it=>it.id===e.id);
+      if(item){
+        catTotals[item.cat] = (catTotals[item.cat]||0) + e.pts;
+      }
+    });
+  }
+  wsEl.innerHTML = `
+    <div style="display:flex;justify-content:space-around;text-align:center;margin-bottom:12px">
+      <div><div style="font-family:'Baloo 2';font-size:24px;font-weight:800;color:${weekTotal>=0?'var(--grass)':'var(--tomato)'}">${weekTotal>0?'+':''}${weekTotal}</div><div style="font-size:11px;color:var(--ink-soft);font-weight:700">本周总分</div></div>
+      <div><div style="font-family:'Baloo 2';font-size:24px;font-weight:800;color:var(--sky)">${activeDays}</div><div style="font-size:11px;color:var(--ink-soft);font-weight:700">活跃天数</div></div>
+      <div><div style="font-family:'Baloo 2';font-size:24px;font-weight:800;color:var(--sun)">${bestDay.pts}</div><div style="font-size:11px;color:var(--ink-soft);font-weight:700">最高一天</div></div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px">
+      ${Object.entries(catTotals).map(([cat,pts])=>`<span style="border:2px solid var(--ink);border-radius:999px;padding:4px 10px;font-size:11px;font-weight:800;background:${COLORS[Object.values(state.items).find(i=>i.cat===cat)?.color]||'#fff'}20;color:var(--ink)">${cat} ${pts>0?'+':''}${pts}</span>`).join('')}
+    </div>
+  `;
+}
+
+function renderAchievements(){
+  const grid = document.getElementById('achGrid');
+  grid.innerHTML = '';
+  let unlocked = 0;
+  state.achievements.forEach(ach=>{
+    const done = ach.check(state);
+    if(done) unlocked++;
+    const el = document.createElement('div');
+    el.className = 'ach-badge' + (done?'':' locked');
+    el.innerHTML = `
+      <div class="ach-icon">${done?ach.icon:'🔒'}</div>
+      <div class="ach-name">${ach.name}</div>
+      <div class="ach-desc">${ach.desc}</div>
+      ${done?'<div class="ach-star">✓</div>':''}
+    `;
+    grid.appendChild(el);
+  });
+  document.getElementById('achProgressText').textContent = `已获得 ${unlocked} / ${state.achievements.length} 枚徽章`;
+  document.getElementById('achProgressFill').style.width = (unlocked/state.achievements.length*100) + '%';
+}
+
+function renderRewards(){
+  const avail = availablePoints(state);
+  document.getElementById('totalPoints').textContent = avail;
+  const list = document.getElementById('rewardList');
+  list.innerHTML = '';
+  state.rewards.forEach(rw=>{
+    const can = avail >= rw.cost;
+    const el = document.createElement('div');
+    el.className = 'reward-item';
+    el.innerHTML = `
+      <div class="rw-icon" style="background:var(--cream-2)">${rw.icon}</div>
+      <div class="rw-info">
+        <div class="rw-name">${rw.name}</div>
+        <div class="rw-cost">${rw.cost} 积分</div>
+      </div>
+      <button class="rw-btn ${can?'':'disabled'}" ${can?'':'disabled'}>${can?'兑换':'积分不足'}</button>
+    `;
+    if(can){
+      el.querySelector('.rw-btn').addEventListener('click', ()=>redeem(rw));
+    }
+    list.appendChild(el);
+  });
+}
+
+function renderProfile(){
+  document.getElementById('profileName').textContent = state.profile.name;
+  document.getElementById('profileGrade').textContent = state.profile.grade;
+  document.getElementById('profileAvatar').textContent = state.profile.avatar;
+  document.getElementById('psTotal').textContent = totalAll(state);
+  document.getElementById('psDays').textContent = Object.keys(state.logs).filter(d=>dayTotal(state,d)>0).length;
+  document.getElementById('psBadges').textContent = state.achievements.filter(a=>a.check(state)).length;
+}
+
+// ===== ACTIONS =====
+function addPoint(item, sourceEl){
+  const today = todayStr();
+  if(!state.logs[today]) state.logs[today] = [];
+  const now = new Date();
+  const entry = {
+    id: item.id,
+    name: item.name,
+    pts: item.pts,
+    icon: item.icon,
+    color: item.color,
+    time: `${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`,
+    logId: 'log_' + Date.now() + '_' + Math.random().toString(36).slice(2,6)
+  };
+  state.logs[today].push(entry);
+  save();
+  render();
+  // floating animation
+  if(sourceEl){
+    const rect = sourceEl.getBoundingClientRect();
+    const fp = document.createElement('div');
+    fp.className = 'float-pts';
+    fp.textContent = (item.pts>0?'+':'') + item.pts;
+    fp.style.color = item.pts>0 ? COLORS.grass : COLORS.tomato;
+    fp.style.left = (rect.left + rect.width/2 - 20) + 'px';
+    fp.style.top = (rect.top - 10) + 'px';
+    document.body.appendChild(fp);
+    setTimeout(()=>fp.remove(), 1000);
+  }
+  // check achievements
+  checkNewAchievements();
+  // confetti for positive
+  if(item.pts>0){
+    confetti();
+  }
+  toast(`${item.name} ${item.pts>0?'+':''}${item.pts}分`);
+}
+
+function delLog(logId){
+  const today = todayStr();
+  if(!state.logs[today]) return;
+  state.logs[today] = state.logs[today].filter(e=>e.logId!==logId);
+  if(state.logs[today].length===0) delete state.logs[today];
+  save();
+  render();
+}
+
+function redeem(rw){
+  const avail = availablePoints(state);
+  if(avail < rw.cost){ toast('积分不足！'); return; }
+  state.redeemed.push({ rewardId: rw.id, name: rw.name, cost: rw.cost, date: todayStr() });
+  save();
+  render();
+  checkNewAchievements();
+  confetti();
+  toast(`兑换成功：${rw.name}！`);
+}
+
+function checkNewAchievements(){
+  // could add notifications for new unlocks - simplified
+}
+
+// ===== NAV =====
+document.querySelectorAll('.nav-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const target = btn.dataset.screen;
+    document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+    document.getElementById('screen-'+target).classList.add('active');
+    if(target==='records') renderRecords();
+    if(target==='achievements') renderAchievements();
+    if(target==='rewards') renderRewards();
+    if(target==='profile') renderProfile();
+    window.scrollTo(0,0);
+  });
+});
+
+document.getElementById('fab').addEventListener('click', ()=>{
+  // scroll to top and highlight quick add
+  document.getElementById('screen-today').querySelectorAll('.screen').forEach(s=>{});
+  document.getElementById('screens').querySelector('#screen-today').scrollTop = 0;
+  // switch to today
+  document.querySelector('.nav-btn[data-screen="today"]').click();
+  setTimeout(()=>{
+    const grid = document.getElementById('quickAddGrid');
+    grid.style.animation = 'none';
+    grid.offsetHeight;
+    grid.style.animation = '';
+    grid.scrollIntoView({behavior:'smooth',block:'center'});
+  },100);
+});
+
+// Calendar nav
+document.getElementById('prevWeek').addEventListener('click', ()=>{ calOffset--; renderRecords(); });
+document.getElementById('nextWeek').addEventListener('click', ()=>{ calOffset++; renderRecords(); });
+
+// ===== MODAL =====
+function openModal(html){
+  document.getElementById('modalContent').innerHTML = `<div class="modal-handle"></div>${html}`;
+  document.getElementById('modalOverlay').classList.add('show');
+}
+function closeModal(){
+  document.getElementById('modalOverlay').classList.remove('show');
+}
+document.getElementById('modalOverlay').addEventListener('click', e=>{
+  if(e.target.id==='modalOverlay') closeModal();
+});
+
+// Profile menu
+document.getElementById('menuEditProfile').addEventListener('click', ()=>{
+  const avatars = ['🦊','🐱','🐼','🐯','🦁','🐸','🐵','🐰','🐨','🐧','🦄','🌟'];
+  openModal(`
+    <h2>编辑资料</h2>
+    <div style="margin-bottom:14px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px;color:var(--ink-soft)">选择头像</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px">
+        ${avatars.map(a=>`<button class="cat-chip avatar-chip ${a===state.profile.avatar?'active':''}" data-avatar="${a}" style="font-size:20px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;${a===state.profile.avatar?'background:var(--sun)':''}">${a}</button>`).join('')}
+      </div>
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px;color:var(--ink-soft)">姓名</div>
+      <input type="text" id="inputName" value="${state.profile.name}" placeholder="输入姓名">
+    </div>
+    <div style="margin-bottom:16px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px;color:var(--ink-soft)">年级</div>
+      <select id="inputGrade">
+        ${['一年级','二年级','三年级','四年级','五年级','六年级'].map(g=>`<option ${g===state.profile.grade?'selected':''}>${g}</option>`).join('')}
+      </select>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnCancel">取消</button>
+      <button class="btn btn-primary" id="btnSaveProfile">保存</button>
+    </div>
+  `);
+  let selectedAvatar = state.profile.avatar;
+  document.querySelectorAll('.avatar-chip').forEach(c=>{
+    c.addEventListener('click', ()=>{
+      document.querySelectorAll('.avatar-chip').forEach(x=>{x.classList.remove('active');x.style.background='#fff'});
+      c.classList.add('active');
+      c.style.background = 'var(--sun)';
+      selectedAvatar = c.dataset.avatar;
+    });
+  });
+  document.getElementById('btnCancel').addEventListener('click', closeModal);
+  document.getElementById('btnSaveProfile').addEventListener('click', ()=>{
+    state.profile.name = document.getElementById('inputName').value.trim() || '小朋友';
+    state.profile.grade = document.getElementById('inputGrade').value;
+    state.profile.avatar = selectedAvatar;
+    save();
+    render();
+    closeModal();
+    toast('资料已保存');
+  });
+});
+
+document.getElementById('menuManageItems').addEventListener('click', ()=>{
+  renderManageItems();
+});
+function renderManageItems(){
+  const cats = [...new Set(state.items.map(i=>i.cat))];
+  openModal(`
+    <h2>管理积分项目</h2>
+    <div class="item-manage-list" id="itemList">
+      ${state.items.map(it=>`
+        <div class="item-manage-row">
+          <div class="imr-icon" style="background:${COLORS[it.color]||'#ccc'};color:#fff">${it.icon}</div>
+          <div class="imr-name">${it.name}<br><span style="font-size:10px;color:var(--ink-soft)">${it.cat}</span></div>
+          <div class="imr-pts ${it.pts>=0?'plus':'minus'}">${it.pts>0?'+':''}${it.pts}</div>
+          <button class="imr-del" data-id="${it.id}">✕</button>
+        </div>
+      `).join('')}
+    </div>
+    <div style="border-top:2px dashed var(--ink);padding-top:14px;margin-bottom:10px;font-size:14px;font-weight:800">添加新项目</div>
+    <div class="input-row">
+      <input type="text" id="newItemName" placeholder="项目名称" style="flex:1">
+      <input type="number" id="newItemPts" placeholder="分值" style="width:80px">
+    </div>
+    <div style="margin-bottom:10px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px;color:var(--ink-soft)">分类</div>
+      <div class="cat-picker" id="newCatPicker">
+        ${['学习','品德','劳动','运动','生活','扣分'].map(c=>`<span class="cat-chip" data-cat="${c}">${c}</span>`).join('')}
+      </div>
+    </div>
+    <div style="margin-bottom:14px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px;color:var(--ink-soft)">图标</div>
+      <div class="cat-picker" id="newIconPicker">
+        ${['📝','📖','✏','🏆','🤝','👋','✓','🧹','🧺','⚽','⏰','🥗','🎨','🎵','💡','⚠','⏱','💢','🌟','💪'].map(i=>`<span class="cat-chip" data-icon="${i}" style="font-size:18px">${i}</span>`).join('')}
+      </div>
+    </div>
+    <div style="margin-bottom:14px">
+      <div style="font-size:13px;font-weight:700;margin-bottom:6px;color:var(--ink-soft)">颜色</div>
+      <div class="cat-picker" id="newColorPicker">
+        ${Object.entries(COLORS).map(([k,v])=>`<span class="cat-chip" data-color="${k}" style="background:${v};color:#fff;border-color:var(--ink)">${k}</span>`).join('')}
+      </div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnCloseManage">关闭</button>
+      <button class="btn btn-primary" id="btnAddItem">添加项目</button>
+    </div>
+  `);
+  // handle selections
+  let selCat='学习', selIcon='📝', selColor='sky';
+  document.querySelectorAll('#newCatPicker .cat-chip').forEach(c=>{
+    c.addEventListener('click',()=>{
+      document.querySelectorAll('#newCatPicker .cat-chip').forEach(x=>x.classList.remove('active'));
+      c.classList.add('active');
+      c.style.background = COLORS[selColor] || '#fff';
+      c.style.color = '#fff';
+      selCat = c.dataset.cat;
+    });
+  });
+  document.querySelectorAll('#newIconPicker .cat-chip').forEach(c=>{
+    c.addEventListener('click',()=>{
+      document.querySelectorAll('#newIconPicker .cat-chip').forEach(x=>{x.classList.remove('active');x.style.background='#fff';x.style.color=''});
+      c.classList.add('active');
+      c.style.background = COLORS[selColor]||'#fff';
+      c.style.color = '#fff';
+      selIcon = c.dataset.icon;
+    });
+  });
+  document.querySelectorAll('#newColorPicker .cat-chip').forEach(c=>{
+    c.addEventListener('click',()=>{
+      document.querySelectorAll('#newColorPicker .cat-chip').forEach(x=>{x.style.background=COLORS[x.dataset.color];x.style.color='#fff';x.classList.remove('active')});
+      c.classList.add('active');
+      c.style.outline = '2px solid var(--ink)';
+      c.style.outlineOffset = '2px';
+      selColor = c.dataset.color;
+    });
+  });
+  // delete items
+  document.querySelectorAll('.imr-del').forEach(b=>{
+    b.addEventListener('click',()=>{
+      const id = b.dataset.id;
+      state.items = state.items.filter(i=>i.id!==id);
+      save();
+      renderManageItems();
+      render();
+    });
+  });
+  document.getElementById('btnCloseManage').addEventListener('click', closeModal);
+  document.getElementById('btnAddItem').addEventListener('click', ()=>{
+    const name = document.getElementById('newItemName').value.trim();
+    const pts = parseInt(document.getElementById('newItemPts').value);
+    if(!name){ toast('请输入名称'); return; }
+    if(isNaN(pts)){ toast('请输入分值'); return; }
+    const newItem = {
+      id: 'i_'+Date.now(),
+      name, pts, cat:selCat, icon:selIcon, color:selColor
+    };
+    state.items.push(newItem);
+    save();
+    toast('已添加：'+name);
+    renderManageItems();
+    render();
+  });
+}
+
+document.getElementById('menuSetGoal').addEventListener('click', ()=>{
+  openModal(`
+    <h2>设置每日目标</h2>
+    <div style="text-align:center;margin-bottom:16px">
+      <div style="font-size:13px;color:var(--ink-soft);font-weight:700;margin-bottom:8px">当前目标</div>
+      <div style="font-family:'Baloo 2';font-size:48px;font-weight:800;color:var(--tomato)">${state.profile.dailyGoal}</div>
+      <div style="font-size:12px;color:var(--ink-soft)">分/天</div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px;justify-content:center">
+      ${[10,15,20,25,30,40].map(g=>`<button class="cat-chip ${g===state.profile.dailyGoal?'active':''}" data-goal="${g}" style="${g===state.profile.dailyGoal?'background:var(--sun);color:#fff':''}">${g}分</button>`).join('')}
+    </div>
+    <div class="input-row">
+      <input type="number" id="customGoal" placeholder="自定义分值" style="text-align:center">
+      <button class="btn btn-primary" id="btnCustomGoal" style="flex:0 0 auto;width:80px">设定</button>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnCancelGoal">关闭</button>
+    </div>
+  `);
+  document.querySelectorAll('[data-goal]').forEach(b=>{
+    b.addEventListener('click',()=>{
+      state.profile.dailyGoal = parseInt(b.dataset.goal);
+      save(); render(); closeModal(); toast('目标已更新');
+    });
+  });
+  document.getElementById('btnCustomGoal').addEventListener('click',()=>{
+    const v = parseInt(document.getElementById('customGoal').value);
+    if(v>0){ state.profile.dailyGoal=v; save(); render(); closeModal(); toast('目标已更新'); }
+  });
+  document.getElementById('btnCancelGoal').addEventListener('click', closeModal);
+});
+
+document.getElementById('menuReset').addEventListener('click', ()=>{
+  openModal(`
+    <h2>⚠ 清空数据</h2>
+    <div style="text-align:center;padding:10px 0 20px;color:var(--ink-soft);font-size:14px;line-height:1.6">
+      这将清空所有积分记录、兑换记录。<br>积分项目和奖励设置会保留。<br><br>
+      <strong style="color:var(--tomato)">此操作不可恢复！</strong>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" id="btnCancelReset">取消</button>
+      <button class="btn btn-danger" id="btnConfirmReset">确认清空</button>
+    </div>
+  `);
+  document.getElementById('btnCancelReset').addEventListener('click', closeModal);
+  document.getElementById('btnConfirmReset').addEventListener('click', ()=>{
+    state.logs = {};
+    state.redeemed = [];
+    save();
+    render();
+    closeModal();
+    toast('数据已清空');
+  });
+});
+
+// ===== TOAST =====
+let toastTimer;
+function toast(msg){
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>el.classList.remove('show'), 1800);
+}
+
+// ===== CONFETTI =====
+function confetti(){
+  const colors = [COLORS.tomato,COLORS.sky,COLORS.sun,COLORS.grass,COLORS.grape,COLORS.peach,COLORS.pink];
+  for(let i=0;i<12;i++){
+    const c = document.createElement('div');
+    c.className = 'confetti';
+    c.style.left = (40+Math.random()*20) + '%';
+    c.style.top = '40%';
+    c.style.background = colors[Math.floor(Math.random()*colors.length)];
+    c.style.borderRadius = Math.random()>0.5 ? '50%' : '2px';
+    c.style.width = (5+Math.random()*7) + 'px';
+    c.style.height = (5+Math.random()*7) + 'px';
+    c.style.transform = `rotate(${Math.random()*360}deg)`;
+    c.style.animationDuration = (1+Math.random()) + 's';
+    c.style.animationDelay = (Math.random()*.3) + 's';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(), 2000);
+  }
+}
+
+// ===== INIT =====
+load();
+render();
+</script>
+</body>
+</html>
