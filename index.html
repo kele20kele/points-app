@@ -1122,6 +1122,7 @@ let state = {
     { id:'i10', name:'坚持运动', pts:4, cat:'运动', icon:'⚽', color:'tomato' },
     { id:'i11', name:'按时起床', pts:2, cat:'生活', icon:'⏰', color:'grape' },
     { id:'i12', name:'少吃零食', pts:3, cat:'生活', icon:'🥗', color:'grape' },
+    { id:'i16', name:'书法打卡', pts:2, cat:'学习', icon:'🖌', color:'sky' },
     { id:'i13', name:'浪费粮食', pts:-3, cat:'扣分', icon:'⚠', color:'tomato' },
     { id:'i14', name:'迟到', pts:-2, cat:'扣分', icon:'⏱', color:'tomato' },
     { id:'i15', name:'吵架打闹', pts:-4, cat:'扣分', icon:'💢', color:'tomato' },
@@ -1158,7 +1159,10 @@ function load(){
     const raw = localStorage.getItem(STORAGE_KEY);
     if(raw){
       const data = JSON.parse(raw);
-      state = { ...state, ...data, profile:{...state.profile, ...data.profile}, achievements: state.achievements };
+      const defaultItemIds = state.items.map(i=>i.id);
+      const savedExtraItems = (data.items||[]).filter(i=>!defaultItemIds.includes(i.id));
+      const mergedItems = [...state.items, ...savedExtraItems];
+      state = { ...state, ...data, items: mergedItems, profile:{...state.profile, ...data.profile}, achievements: state.achievements };
     }
   }catch(e){ console.warn('load error', e); }
 }
