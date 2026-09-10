@@ -1123,6 +1123,7 @@ let state = {
     { id:'i11', name:'按时起床', pts:2, cat:'生活', icon:'⏰', color:'grape' },
     { id:'i12', name:'少吃零食', pts:3, cat:'生活', icon:'🥗', color:'grape' },
     { id:'i16', name:'书法打卡', pts:2, cat:'学习', icon:'🖌', color:'sky' },
+    { id:'i17', name:'英语打卡', pts:2, cat:'学习', icon:'🔤', color:'sky' },
     { id:'i13', name:'浪费粮食', pts:-3, cat:'扣分', icon:'⚠', color:'tomato' },
     { id:'i14', name:'迟到', pts:-2, cat:'扣分', icon:'⏱', color:'tomato' },
     { id:'i15', name:'吵架打闹', pts:-4, cat:'扣分', icon:'💢', color:'tomato' },
@@ -1602,7 +1603,7 @@ document.getElementById('menuEditProfile').addEventListener('click', ()=>{
   });
   document.getElementById('btnCancel').addEventListener('click', closeModal);
   document.getElementById('btnSaveProfile').addEventListener('click', ()=>{
-    state.profile.name = document.getElementById('inputName').value.trim() || '小朋友';
+    state.profile.name = document.getElementById('inputName').value.trim() || '可乐';
     state.profile.grade = document.getElementById('inputGrade').value;
     state.profile.avatar = selectedAvatar;
     save();
